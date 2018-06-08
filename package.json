@@ -1,6 +1,6 @@
 {
   "name": "@karmalicious/nodejs-drivers",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "main": "build/index.js",
   "repository": "git@github.com:karmadev/nodejs-drivers.git",
   "author": "Marcus Nielsen <marcus@karma.life>",
