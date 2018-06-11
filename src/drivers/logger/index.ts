@@ -1,4 +1,5 @@
-import * as winston from 'winston'
+import * as w from 'winston'
+const winston = w as any
 
 export const makeLogger = config => {
   const { LOG_LEVEL } = config
