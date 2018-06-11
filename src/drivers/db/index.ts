@@ -1,4 +1,5 @@
-import * as Sequelize from 'sequelize'
+import * as S from 'sequelize'
+const Sequelize = S as any
 
 export const makeDb = config => {
   const { DB_DB, DB_USR, DB_PSW, DB_HOST } = config
