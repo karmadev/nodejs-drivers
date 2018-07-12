@@ -8,6 +8,10 @@ export const makeDb = config => {
     dialect: 'postgres',
     host: DB_HOST,
     logging: false,
+    ssl: true,
+    dialectOptions: {
+      ssl: true,
+    },
     pool: {
       idle: 10000,
       max: 5,
