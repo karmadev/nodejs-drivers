@@ -10,13 +10,9 @@ export const makeDb = config => {
       ? { ssl: true }
       : {
           ssl: {
-            ca: fs.readFileSync('../../ssl/karma-postgres-prod/server-ca.pem'),
-            cert: fs.readFileSync(
-              '../../ssl/karma-postgres-prod/client-cert.pem'
-            ),
-            key: fs.readFileSync(
-              '../../ssl/karma-postgres-prod/client-key.pem'
-            ),
+            ca: fs.readFileSync('../ssl/karma-postgres-prod/server-ca.pem'),
+            cert: fs.readFileSync('../ssl/karma-postgres-prod/client-cert.pem'),
+            key: fs.readFileSync('../ssl/karma-postgres-prod/client-key.pem'),
           },
         }
 
