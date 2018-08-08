@@ -10,7 +10,7 @@ test('makeReport', () => {
         streamResult += data
       })
       resultStream.on('end', () => {
-        expect(streamResult.toString().length).toEqual(6498)
+        expect(streamResult.toString().startsWith('%PDF-1.4')).toEqual(true)
         resolve()
       })
     })
