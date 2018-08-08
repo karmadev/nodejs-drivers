@@ -1,31 +1,32 @@
 import { makeDb } from './db'
 import { makeLogger } from './logger'
-import { makeMsgBroker } from './msg-broker'
-import { makeReport } from './report'
+import { PubSub } from './pub-sub'
 import { makeServer } from './server'
 import { makeToken } from './token'
+import { jwt } from './jwt'
+import { httpReq } from './http-req'
 
-export const makeDrivers = args => {
-  const { config } = args
+export const makeServerDrivers = args => {
+  const config = args.config
   const logger = makeLogger(config)
-  const { router, serverListen } = makeServer(config, logger)
-  const { reportDriver, reportInitP } = makeReport(config)
+  const server = makeServer(config, logger)
   const { dbDriver, dbClose } = makeDb(config)
   const init = () =>
-    Promise.all([serverListen(), reportInitP]).then(([server]: any[]) => {
+    server.serverListen().then((runningServer: any) => {
       return {
         close: () =>
-          Promise.all([server.close(), dbClose()]).then(() => undefined),
-        serverPort: server.port,
+          Promise.all([runningServer.close(), dbClose()]).then(() => true),
+        serverPort: runningServer.port,
       }
     })
   return {
+    jwt,
+    httpReq,
     db: dbDriver,
     init,
     logger,
-    msgBroker: makeMsgBroker(config, logger),
-    report: reportDriver,
-    router,
+    msgBroker: new PubSub(config.GCP_PROJECT_ID, logger),
+    router: server.router,
     token: makeToken(config),
   }
 }

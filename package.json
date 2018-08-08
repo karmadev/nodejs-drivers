@@ -8,11 +8,13 @@
   "license": "MIT",
   "private": false,
   "dependencies": {
+    "@google-cloud/pubsub": "^0.19.0",
     "@types/amqplib": "^0.5.6",
     "@types/body-parser": "^1.17.0",
     "@types/dotenv": "^4.0.3",
     "@types/express": "^4.16.0",
     "@types/jest": "^23.1.0",
+    "@types/jsonwebtoken": "^7.2.8",
     "@types/jsreport-core": "^1.5.0",
     "@types/sequelize": "^4.27.21",
     "@types/winston": "^2.3.9",
@@ -20,11 +22,13 @@
     "body-parser": "^1.18.3",
     "dotenv": "^6.0.0",
     "express": "^4.16.3",
+    "jsonwebtoken": "^8.3.0",
     "jsreport": "^2.1.0",
     "jsreport-core": "^2.0.3",
     "jsreport-jsrender": "^2.0.0",
     "jsreport-phantom-pdf": "^2.0.2",
     "pg": "^7.4.3",
+    "rxjs": "^6.2.2",
     "sequelize": "^4.37.10",
     "typescript": "^2.9.2",
     "uuid": "^3.2.1",
@@ -47,7 +51,7 @@
     "build": "npm run build-ts && npm run tslint",
     "serve": "nodemon build/index.js",
     "watch": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"cyan.bold,green.bold\" \"npm run watch-ts\" \"npm run serve\"",
-    "test": "NODE_ENV=test jest --forceExit",
+    "test": "NODE_ENV=test jest",
     "build-ts": "tsc",
     "watch-ts": "tsc -w",
     "tslint": "tslint -c tslint.json -p tsconfig.json",
@@ -71,7 +75,8 @@
     },
     "moduleFileExtensions": [
       "ts",
-      "js"
+      "js",
+      "json"
     ],
     "transform": {
       "^.+\\.(ts|tsx)$": "./node_modules/ts-jest/preprocessor.js"

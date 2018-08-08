@@ -1,7 +1,10 @@
 import * as bodyParser from 'body-parser'
 import * as makeExpress from 'express'
 
-const makeRouter = (expressRouter, logger) => (routeDef, modelHandlerP) => {
+const makeRouter = (expressRouter: makeExpress.Router, logger: any) => (
+  routeDef,
+  modelMethod
+) => {
   const relativeBaseUrl = routeDef.url
 
   const routeUrl = routeDef.params
@@ -35,7 +38,7 @@ const makeRouter = (expressRouter, logger) => (routeDef, modelHandlerP) => {
               res.json(data)
             }
 
-    modelHandlerP(routeArgs)
+    modelMethod(routeArgs)
       .then(resHandler)
       .catch(err => {
         const clientError = {
@@ -73,8 +76,15 @@ export const makeServer = (config, logger) => {
   expressUse(bodyParser.json())
   expressUse('/', expressRouter)
 
+  const router = makeRouter(expressRouter, logger)
+
+  const initRoutes = ({ routes, model }) => {
+    routes.forEach(route => router(route, model[route.model]))
+  }
+
   const effects = {
-    router: makeRouter(expressRouter, logger),
+    router,
+    initRoutes,
     serverListen: makeListen(listenExpress, serverPort),
   }
 
