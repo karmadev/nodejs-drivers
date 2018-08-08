@@ -26,7 +26,7 @@ export const makeServerDrivers = args => {
     init,
     logger,
     msgBroker: new PubSub(config.GCP_PROJECT_ID, logger),
-    router: server.router,
+    initRoutes: server.initRoutes,
     token: makeToken(config),
   }
 }
