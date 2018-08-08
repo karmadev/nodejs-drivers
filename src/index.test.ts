@@ -1,8 +1,8 @@
 import axios from 'axios'
-import { makeDeps } from './deps'
+import { makeServerDeps } from './deps'
 
 test('app', () => {
-  const deps = makeDeps({
+  const deps = makeServerDeps({
     envVars: {
       PRE_LOG_LEVEL: 'error',
       PRE_SERVER_PORT: '9896',
@@ -42,8 +42,8 @@ const makeModule = ({ deps }) => {
   }
 }
 
-test.skip('Module handles request successfully', () => {
-  const deps = makeDeps({
+test('Module handles request successfully', () => {
+  const deps = makeServerDeps({
     envVars: {
       PRE_LOG_LEVEL: 'error',
       PRE_SERVER_PORT: '9897',

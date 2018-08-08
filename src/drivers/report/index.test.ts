@@ -1,8 +1,8 @@
 import { makeReport } from './index'
 
 test('makeReport', () => {
-  const { reportDriver } = makeReport({})
-  const resultP = reportDriver({ content: '<h1>Test</h1>' })
+  const { driver } = makeReport({})
+  const resultP = driver({ content: '<h1>Test</h1>' })
   return resultP.then(resultStream => {
     let streamResult = ''
     const expectP = new Promise(resolve => {
@@ -10,7 +10,7 @@ test('makeReport', () => {
         streamResult += data
       })
       resultStream.on('end', () => {
-        expect(streamResult.toString().length).toEqual(3494)
+        expect(streamResult.toString().length).toEqual(6498)
         resolve()
       })
     })

@@ -1,10 +1,11 @@
+import * as cT from '../../config//types'
 import { createLogger, transports } from 'winston'
-// const winston = w as any
 
-export const makeLogger = (config: any) => {
+export const makeLogger = (config: cT.IConfig) => {
   const { LOG_LEVEL } = config
+
   const wLogger = createLogger({
-    transports: [new transports.Console()],
+    transports: [new transports.Console({ level: LOG_LEVEL })],
   })
 
   const info = (msg: any) => wLogger.info(msg, { timestamp: Date.now() })

@@ -4,7 +4,10 @@
   "jsRules": {},
   "rules": {
     "arrow-parens": false,
-    "trailing-comma": true
+    "trailing-comma": true,
+    "object-literal-sort-keys": false,
+    "prefer-const": false,
+    "ordered-imports": false
   },
   "env": {
     "jest": true
