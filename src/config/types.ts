@@ -2,10 +2,6 @@ export type makeFilterToPrefixed = (
   prefix: string
 ) => ([key, _]: [string, {}]) => boolean
 
-export type makeFilterToPopulatedValues = (
-  removeToken: string
-) => ([key, val]: [string, string]) => boolean
-
 export type reduceToConfigObject = (
   accumulator: {},
   [key, val]: [string, boolean | string]
@@ -21,7 +17,6 @@ export type mapToNoPrefix = (
 
 export interface IConfigArgs {
   prefix: string
-  removeToken: string
   envVars: {
     [s: string]: string | undefined
   }

@@ -1,4 +1,3 @@
-import axios from 'axios'
 import { makeServerDeps } from './deps'
 
 test('app', () => {
@@ -8,7 +7,6 @@ test('app', () => {
       PRE_SERVER_PORT: '9896',
     },
     prefix: 'PRE_',
-    removeToken: '__NONE__',
   })
   return deps.drivers.init().then((data: any) =>
     data.close().then(() => {
@@ -49,14 +47,23 @@ test('Module handles request successfully', () => {
       PRE_SERVER_PORT: '9897',
     },
     prefix: 'PRE_',
-    removeToken: '__NONE__',
   })
   makeModule({ deps })
   return deps.drivers.init().then((data: any) =>
-    axios.get('http://localhost:9897/getUserById/123-abc').then(response =>
-      data.close().then(() => {
-        expect(response.data).toEqual({ id: '123-abc', name: 'Marcus Nielsen' })
+    deps.drivers
+      .httpReq({
+        url: 'http://localhost:9897/getUserById/123-abc',
+        body: {},
+        method: 'get',
+        authToken: '',
       })
-    )
+      .then(response =>
+        data.close().then(() => {
+          expect(response).toEqual({
+            id: '123-abc',
+            name: 'Marcus Nielsen',
+          })
+        })
+      )
   )
 })

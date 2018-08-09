@@ -18,11 +18,6 @@ import * as t from './types'
 const makeFilterToPrefixed: t.makeFilterToPrefixed = prefix => ([key, _]) =>
   key.startsWith(prefix)
 
-const makeFilterToPopulatedValues: t.makeFilterToPopulatedValues = removeToken => ([
-  key,
-  val,
-]) => val !== removeToken
-
 const reduceToConfigObject: t.reduceToConfigObject = (
   accumulator,
   [key, val]
@@ -48,7 +43,7 @@ const mapToNoPrefix: t.mapToNoPrefix = prefix => ([key, val]) => [
 ]
 
 export const makeConfig: t.makeConfig = args => {
-  const { envVars, prefix, removeToken } = args
+  const { envVars, prefix } = args
 
   const definedEnvVars: { [s: string]: string } = Object.entries(
     envVars
@@ -61,7 +56,6 @@ export const makeConfig: t.makeConfig = args => {
 
   return Object.entries(definedEnvVars)
     .filter(makeFilterToPrefixed(prefix))
-    .filter(makeFilterToPopulatedValues(removeToken))
     .map(mapToBoolOrId)
     .map(mapToNoPrefix(prefix))
     .reduce(reduceToConfigObject, {})
