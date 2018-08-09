@@ -2,7 +2,7 @@ import { makeDb } from './db'
 import { makeLogger } from './logger'
 import { PubSub } from './pub-sub'
 import { makeServer } from './server'
-import { makeToken } from './token'
+import { makeUuid } from './uuid'
 import * as jwt from './jwt'
 import { httpReq } from './http-req'
 import * as t from './types'
@@ -12,12 +12,12 @@ export const makeServerDrivers: t.makeServerDrivers = args => {
   const logger = makeLogger(config)
   const server = makeServer(config, logger)
   const db = makeDb(config)
-  const init = () =>
+  const init: t.init = () =>
     server.serverListen().then((runningServer: any) => {
       return {
         close: () =>
           Promise.all([runningServer.close(), db.close()]).then(() => true),
-        serverPort: runningServer.port,
+        serverPort: runningServer.port as number,
       }
     })
   return {
@@ -26,8 +26,8 @@ export const makeServerDrivers: t.makeServerDrivers = args => {
     db: db.driver,
     init,
     logger,
-    msgBroker: new PubSub(config.GCP_PROJECT_ID, logger),
+    pubSub: new PubSub(config.GCP_PROJECT_ID, logger),
     initRoutes: server.initRoutes,
-    token: makeToken(config),
+    uuid: makeUuid(),
   }
 }

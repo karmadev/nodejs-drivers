@@ -2,6 +2,8 @@ import * as GcpPubSub from '@google-cloud/pubsub'
 import { Subject } from 'rxjs'
 import { map } from 'rxjs/operators'
 
+type PubSubResult = any
+
 export class PubSub {
   private projectId: string
   private client: any
@@ -13,7 +15,7 @@ export class PubSub {
     })
   }
 
-  public createTopic(name: string): any {
+  public createTopic(name: string): Promise<PubSubResult> {
     return this.client.getTopics().then(results => {
       const topics = results[0]
       const found = topics.find(
@@ -25,7 +27,7 @@ export class PubSub {
     })
   }
 
-  public publishMessage(topicName: string, data: any): any {
+  public publishMessage(topicName: string, data: any): Promise<any> {
     const dataBuffer = Buffer.from(JSON.stringify(data))
 
     return this.client
@@ -37,7 +39,7 @@ export class PubSub {
   public createSubscription(
     topicName: string,
     subscriptionName: string
-  ): Subject<any> {
+  ): Promise<Subject<any>> {
     return this.client
       .topic(topicName)
       .createSubscription(subscriptionName)
@@ -50,7 +52,7 @@ export class PubSub {
       })
   }
 
-  public getSubscriptions(): any[] {
+  public getSubscriptions(): Promise<any[]> {
     return this.client.getSubscriptions().then(results => results[0])
   }
 }
