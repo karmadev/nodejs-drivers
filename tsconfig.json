@@ -10,7 +10,8 @@
     "noImplicitAny": false /* Raise error on expressions and declarations with an implied 'any' type. */,
     "types": [
       "jest",
-    ] /* Type declaration files to be included in compilation. */
+    ], /* Type declaration files to be included in compilation. */
+    "declaration": true
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "**/*.test.ts"]

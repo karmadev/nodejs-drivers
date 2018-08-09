@@ -1,9 +1,9 @@
 import * as fs from 'fs'
 import * as S from 'sequelize'
-import * as cT from '../../config/types'
+import * as t from './types'
 const Sequelize = S as any
 
-export const makeDb = (config: cT.IConfig) => {
+export const makeDb: t.makeDb = config => {
   const { DB_DB, DB_USR, DB_PSW, DB_HOST, DB_SSL_CERT_PATH } = config
 
   const dialectOptions = DB_SSL_CERT_PATH
@@ -16,7 +16,7 @@ export const makeDb = (config: cT.IConfig) => {
       }
     : { ssl: true }
 
-  const db = new Sequelize(DB_DB, DB_USR, DB_PSW, {
+  const sequelize = new Sequelize(DB_DB, DB_USR, DB_PSW, {
     dialect: 'postgres',
     dialectOptions,
     host: DB_HOST,
@@ -28,21 +28,23 @@ export const makeDb = (config: cT.IConfig) => {
     },
   })
 
-  const dbDriver = (
+  const driver = (
     sqlString: string,
     opts: { type: string; bind: any }
   ): Promise<any> =>
-    db
+    sequelize
       .query(sqlString, opts)
       .catch(err => {
         throw err
       })
       .then(sqlData => sqlData)
 
-  return {
-    dbClose: () => {
-      db.close()
+  const db: t.IDb = {
+    close: () => {
+      sequelize.close()
     },
-    dbDriver,
+    driver,
   }
+
+  return db
 }

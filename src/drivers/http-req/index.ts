@@ -1,13 +1,7 @@
 import axios from 'axios'
+import * as t from './types'
 
-interface IArgs {
-  method: string
-  url: string
-  body: any
-  authToken: string
-}
-
-export const httpReq = (args: IArgs) =>
+export const httpReq: t.httpReq = args =>
   axios({
     method: args.method,
     url: args.url,
