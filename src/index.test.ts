@@ -36,7 +36,7 @@ const makeModule = ({ deps }) => {
       url: 'getUserById',
     },
   ]
-  deps.drivers.router(routes[0], model[routes[0].model])
+  deps.drivers.initRoutes({ routes, model })
   return {
     model,
   }
