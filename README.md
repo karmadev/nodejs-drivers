@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/karmadev/nodejs-drivers.svg?branch=master)](https://travis-ci.org/karmadev/nodejs-drivers)
+
 # nodejs-drivers
 
 A set of common dependencies needed to get started with a nodejs-server.
