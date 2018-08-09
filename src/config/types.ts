@@ -23,7 +23,7 @@ export interface IConfigArgs {
   prefix: string
   removeToken: string
   envVars: {
-    [s: string]: string
+    [s: string]: string | undefined
   }
 }
 

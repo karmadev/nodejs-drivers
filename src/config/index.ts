@@ -50,7 +50,16 @@ const mapToNoPrefix: t.mapToNoPrefix = prefix => ([key, val]) => [
 export const makeConfig: t.makeConfig = args => {
   const { envVars, prefix, removeToken } = args
 
-  return Object.entries(envVars)
+  const definedEnvVars: { [s: string]: string } = Object.entries(
+    envVars
+  ).reduce((acc, [key, val]) => {
+    if (typeof val !== 'undefined') {
+      acc[key] = val
+    }
+    return acc
+  }, {})
+
+  return Object.entries(definedEnvVars)
     .filter(makeFilterToPrefixed(prefix))
     .filter(makeFilterToPopulatedValues(removeToken))
     .map(mapToBoolOrId)
