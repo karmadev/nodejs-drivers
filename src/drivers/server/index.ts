@@ -1,5 +1,6 @@
 import * as bodyParser from 'body-parser'
 import * as makeExpress from 'express'
+import * as t from './types'
 
 const makeRouter = (expressRouter: makeExpress.Router, logger: any) => (
   routeDef,
@@ -65,7 +66,7 @@ const makeClose = (expressClose, port) => () =>
     })
   })
 
-export const makeServer = (config, logger) => {
+export const makeServer: t.makeServer = (config, logger) => {
   const { SERVER_PORT: serverPort } = config
 
   const expressServer = makeExpress()
@@ -78,15 +79,15 @@ export const makeServer = (config, logger) => {
 
   const router = makeRouter(expressRouter, logger)
 
-  const initRoutes = ({ routes, model }) => {
+  const initRoutes: t.initRoutes = ({ routes, model }) => {
     routes.forEach(route => router(route, model[route.model]))
   }
 
-  const effects = {
+  const server: t.IServer = {
     router,
     initRoutes,
     serverListen: makeListen(listenExpress, serverPort),
   }
 
-  return effects
+  return server
 }

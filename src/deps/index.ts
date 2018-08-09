@@ -1,9 +1,10 @@
 import { makeConfig } from '../config'
-import { IConfigArgs } from '../config/types'
-import { makeServerDrivers } from '../drivers'
 
-export const makeServerDeps = (configOpts: IConfigArgs) => {
-  const config = makeConfig(configOpts)
+import { makeServerDrivers } from '../drivers'
+import * as t from './types'
+
+export const makeServerDeps: t.makeServerDeps = opts => {
+  const config = makeConfig(opts)
   const drivers = makeServerDrivers({ config })
   return {
     config,

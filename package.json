@@ -1,6 +1,6 @@
 {
   "name": "@karmalicious/nodejs-drivers",
-  "version": "3.0.0",
+  "version": "5.1.1",
   "main": "./build/index.js",
   "types": "./build/index.d.ts",
   "repository": "git@github.com:karmadev/nodejs-drivers.git",
@@ -17,8 +17,10 @@
     "@types/jsonwebtoken": "^7.2.8",
     "@types/jsreport-core": "^1.5.0",
     "@types/sequelize": "^4.27.21",
+    "@types/uuid": "^3.4.3",
     "@types/winston": "^2.3.9",
     "amqplib": "^0.5.2",
+    "axios": "^0.18.0",
     "body-parser": "^1.18.3",
     "dotenv": "^6.0.0",
     "express": "^4.16.3",
@@ -35,7 +37,6 @@
     "winston": "^3.0.0"
   },
   "devDependencies": {
-    "axios": "^0.18.0",
     "concurrently": "^3.5.1",
     "husky": "^0.14.3",
     "jest": "^23.1.0",
