@@ -1,19 +1,15 @@
 export type makeFilterToPrefixed = (
   prefix: string
-) => ([key, _]: [string, {}]) => boolean
+) => ([key, _]: [string, any]) => boolean
 
 export type reduceToConfigObject = (
-  accumulator: {},
-  [key, val]: [string, boolean | string]
-) => {}
-
-export type mapToBoolOrId = (
-  [key, value]: [string, string]
-) => [string, boolean | string]
+  accumulator: { [key: string]: string },
+  [key, val]: [string, string]
+) => { [key: string]: string }
 
 export type mapToNoPrefix = (
   prefix: string
-) => ([key, val]: [string, boolean | string]) => [string, boolean | string]
+) => ([key, val]: [string, string]) => [string, string]
 
 export interface IConfigArgs {
   prefix: string

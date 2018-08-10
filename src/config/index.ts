@@ -26,17 +26,6 @@ const reduceToConfigObject: t.reduceToConfigObject = (
   [key]: val,
 })
 
-const mapToBoolOrId: t.mapToBoolOrId = ([key, val]) => {
-  switch (val) {
-    case 'true':
-      return [key, true]
-    case 'false':
-      return [key, false]
-    default:
-      return [key, val]
-  }
-}
-
 const mapToNoPrefix: t.mapToNoPrefix = prefix => ([key, val]) => [
   key.split(prefix)[1],
   val,
@@ -56,7 +45,6 @@ export const makeConfig: t.makeConfig = args => {
 
   return Object.entries(definedEnvVars)
     .filter(makeFilterToPrefixed(prefix))
-    .map(mapToBoolOrId)
     .map(mapToNoPrefix(prefix))
     .reduce(reduceToConfigObject, {})
 }
