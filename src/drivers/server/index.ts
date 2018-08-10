@@ -52,7 +52,7 @@ const makeRouter = (expressRouter: makeExpress.Router, logger: any) => (
 }
 
 const makeListen = (expressListen, port) => () =>
-  new Promise((resolve, reject) => {
+  new Promise((resolve, _) => {
     const httpServer = expressListen(port, () => {
       const close = makeClose(httpServer.close.bind(httpServer), port)
       resolve({ close, port })
@@ -60,7 +60,7 @@ const makeListen = (expressListen, port) => () =>
   })
 
 const makeClose = (expressClose, port) => () =>
-  new Promise((resolve, reject) => {
+  new Promise((resolve, _) => {
     expressClose(() => {
       resolve(port)
     })
