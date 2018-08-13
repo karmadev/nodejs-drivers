@@ -9,6 +9,10 @@ export class PubSub {
   private client: any
 
   constructor(projectId, logger) {
+    if (!projectId) {
+      throw new Error('Missing argument projectId in PubSub constructor.')
+    }
+
     this.projectId = projectId
     this.client = new GcpPubSub({
       projectId: this.projectId,
