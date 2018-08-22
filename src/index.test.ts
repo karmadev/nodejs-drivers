@@ -5,6 +5,7 @@ test('app', () => {
     envVars: {
       PRE_LOG_LEVEL: 'error',
       PRE_SERVER_PORT: '9896',
+      PRE_GCP_PROJECT_ID: 'id',
     },
     prefix: 'PRE_',
   })
@@ -45,6 +46,7 @@ test('Module handles request successfully', () => {
     envVars: {
       PRE_LOG_LEVEL: 'error',
       PRE_SERVER_PORT: '9897',
+      PRE_GCP_PROJECT_ID: 'id',
     },
     prefix: 'PRE_',
   })

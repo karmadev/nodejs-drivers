@@ -6,7 +6,7 @@ export interface IRoute {
   contentType: string
   method: string
   model: string
-  args?: string[]
+  params?: string[]
   body?: string[]
 }
 

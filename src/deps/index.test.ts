@@ -3,9 +3,8 @@ import { makeServerDeps } from '.'
 test('makeServerDeps', () => {
   expect(() =>
     makeServerDeps({
-      envVars: { PRE_LOG_LEVEL: 'error' },
+      envVars: { PRE_LOG_LEVEL: 'error', PRE_GCP_PROJECT_ID: 'id' },
       prefix: 'PRE_',
-      removeToken: '__NONE__',
     })
   ).not.toThrow()
 })
