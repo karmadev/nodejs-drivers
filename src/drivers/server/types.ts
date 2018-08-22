@@ -6,8 +6,8 @@ export interface IRoute {
   contentType: string
   method: string
   model: string
-  args: string[]
-  body: string[]
+  args?: string[]
+  body?: string[]
 }
 
 export type initRoutes = (args: { routes: IRoute[]; model: any }) => void
