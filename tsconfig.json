@@ -9,7 +9,6 @@
     "strict": true /* Enable all strict type-checking options. */,
     "noImplicitAny": false /* Raise error on expressions and declarations with an implied 'any' type. */,
     "types": [
-      "jest",
     ], /* Type declaration files to be included in compilation. */
     "declaration": true
   },

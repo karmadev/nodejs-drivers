@@ -5,7 +5,7 @@ import * as cT from '../../config/types'
 
 export const makeReport = (config: cT.IConfig) => {
   const jsReport = makeJsReport({ tasks: { strategy: 'in-process' } })
-  const initP = jsReport.init()
+  const initP: Promise<any> = jsReport.init()
   const driver = args => {
     jsReport.use(makeJsReportJsRender())
     jsReport.use(makeJsReportPhantomPdf())

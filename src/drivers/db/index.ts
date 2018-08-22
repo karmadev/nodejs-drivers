@@ -4,14 +4,22 @@ import * as t from './types'
 const Sequelize = S as any
 
 export const makeDb: t.makeDb = config => {
-  const { DB_DB, DB_USR, DB_PSW, DB_HOST, DB_SSL_CERT_PATH } = config
+  const {
+    DB_DB,
+    DB_USR,
+    DB_PSW,
+    DB_HOST,
+    SERVER_CA,
+    CLIENT_CERT,
+    CLIENT_KEY,
+  } = config
 
-  const dialectOptions = DB_SSL_CERT_PATH
+  const dialectOptions = SERVER_CA
     ? {
         ssl: {
-          ca: fs.readFileSync(`${DB_SSL_CERT_PATH}/server-ca.pem`),
-          cert: fs.readFileSync(`${DB_SSL_CERT_PATH}/client-cert.pem`),
-          key: fs.readFileSync(`${DB_SSL_CERT_PATH}/client-key.pem`),
+          ca: new Buffer(SERVER_CA, 'base64').toString('ascii'),
+          cert: new Buffer(CLIENT_CERT, 'base64').toString('ascii'),
+          key: new Buffer(CLIENT_KEY, 'base64').toString('ascii'),
         },
       }
     : { ssl: true }
