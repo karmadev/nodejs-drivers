@@ -1,11 +1,12 @@
-import * as cT from '../../config/types'
-
-export type error = (msg: string) => void
-export type info = (msg: string) => void
-
-export interface ILogger {
-  error: error
-  info: info
+export interface IEntryMeta {
+  [key: string]: any
 }
 
-export type makeLogger = (c: cT.IConfig) => ILogger
+export interface ILogger {
+  debug(message: string, meta?: IEntryMeta): void
+  info(message: string, meta?: IEntryMeta): void
+  warning(message: string, meta?: IEntryMeta): void
+  error(message: string, meta?: IEntryMeta): void
+  eventError(entity: string, method: string, meta?: IEntryMeta): void
+  eventInfo(entity: string, method: string, meta?: IEntryMeta): void
+}

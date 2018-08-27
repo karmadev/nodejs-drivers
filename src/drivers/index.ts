@@ -1,5 +1,4 @@
 import { makeDb } from './db'
-import { makeLogger } from './logger'
 import { PubSub } from './pub-sub'
 import { makeServer } from './server'
 import { makeUuid } from './uuid'
@@ -9,8 +8,7 @@ import * as t from './types'
 
 export const makeServerDrivers: t.makeServerDrivers = args => {
   const config = args.config
-  const logger = makeLogger(config)
-  const server = makeServer(config, logger)
+  const server = makeServer(config, args.logger)
   const db = makeDb(config)
   const init: t.init = () =>
     server.serverListen().then((runningServer: any) => {
@@ -25,8 +23,8 @@ export const makeServerDrivers: t.makeServerDrivers = args => {
     httpReq,
     db: db.driver,
     init,
-    logger,
-    pubSub: new PubSub(config.GCP_PROJECT_ID, logger),
+    logger: args.logger,
+    pubSub: new PubSub(config.GCP_PROJECT_ID, args.logger),
     initRoutes: server.initRoutes,
     uuid: makeUuid(),
   }

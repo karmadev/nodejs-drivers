@@ -1,13 +1,17 @@
 import { makeServerDeps } from './deps'
+import { LoggerMock } from '.'
 
 test('app', () => {
   const deps = makeServerDeps({
-    envVars: {
-      PRE_LOG_LEVEL: 'error',
-      PRE_SERVER_PORT: '9896',
-      PRE_GCP_PROJECT_ID: 'id',
+    config: {
+      envVars: {
+        PRE_LOG_LEVEL: 'error',
+        PRE_SERVER_PORT: '9896',
+        PRE_GCP_PROJECT_ID: 'id',
+      },
+      prefix: 'PRE_',
     },
-    prefix: 'PRE_',
+    logger: new LoggerMock(),
   })
   return deps.drivers.init().then((data: any) =>
     data.close().then(() => {
@@ -43,12 +47,15 @@ const makeModule = ({ deps }) => {
 
 test('Module handles request successfully', () => {
   const deps = makeServerDeps({
-    envVars: {
-      PRE_LOG_LEVEL: 'error',
-      PRE_SERVER_PORT: '9897',
-      PRE_GCP_PROJECT_ID: 'id',
+    config: {
+      envVars: {
+        PRE_LOG_LEVEL: 'error',
+        PRE_SERVER_PORT: '9897',
+        PRE_GCP_PROJECT_ID: 'id',
+      },
+      prefix: 'PRE_',
     },
-    prefix: 'PRE_',
+    logger: new LoggerMock(),
   })
   makeModule({ deps })
   return deps.drivers.init().then((data: any) =>

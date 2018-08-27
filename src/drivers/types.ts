@@ -5,6 +5,7 @@ import * as dbT from './db/types'
 import * as lT from './logger/types'
 import * as sT from './server/types'
 import * as uT from './uuid/types'
+import { ILogger } from './logger'
 
 export type close = () => Promise<boolean>
 
@@ -26,4 +27,6 @@ export interface IServerDrivers {
   uuid: uT.uuid
 }
 
-export type makeServerDrivers = (args: { config: cT.IConfig }) => IServerDrivers
+export type makeServerDrivers = (
+  args: { config: cT.IConfig; logger: ILogger }
+) => IServerDrivers
