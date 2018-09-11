@@ -9,7 +9,6 @@ export { makeDb } from './drivers/db'
 export { httpReq } from './drivers/http-req'
 import * as _jwt from './drivers/jwt'
 export { PubSub } from './drivers/pub-sub'
-export { makeReport } from './drivers/report'
 export { makeServer } from './drivers/server'
 export { makeUuid } from './drivers/uuid'
 // @TODO: Find out a better way to export jwt
