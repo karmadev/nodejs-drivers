@@ -8,7 +8,7 @@ export class PubSub {
   private projectId: string
   private client: any
 
-  constructor(projectId, logger) {
+  constructor(projectId) {
     if (!projectId) {
       throw new Error('Missing argument projectId in PubSub constructor.')
     }
