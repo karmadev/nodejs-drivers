@@ -6,7 +6,6 @@ export const makeServerDeps: t.makeServerDeps = opts => {
   const config = makeConfig(opts.config)
   const drivers = makeServerDrivers({
     config,
-    logger: opts.logger,
   })
   return {
     config,

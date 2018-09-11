@@ -2,7 +2,7 @@ import * as bodyParser from 'body-parser'
 import * as makeExpress from 'express'
 import * as t from './types'
 
-const makeRouter = (expressRouter: makeExpress.Router, logger: any) => (
+const makeRouter = (expressRouter: makeExpress.Router) => (
   routeDef,
   modelMethod
 ) => {
@@ -45,7 +45,8 @@ const makeRouter = (expressRouter: makeExpress.Router, logger: any) => (
         const clientError = {
           message: err.message,
         }
-        logger.error(err)
+        // @TODO: Handle error.
+        // logger.error(err)
         res.json(clientError)
       })
   })
@@ -66,7 +67,7 @@ const makeClose = (expressClose, port) => () =>
     })
   })
 
-export const makeServer: t.makeServer = (config, logger) => {
+export const makeServer: t.makeServer = config => {
   const { SERVER_PORT: serverPort } = config
 
   const expressServer = makeExpress()
@@ -77,7 +78,7 @@ export const makeServer: t.makeServer = (config, logger) => {
   expressUse(bodyParser.json())
   expressUse('/', expressRouter)
 
-  const router = makeRouter(expressRouter, logger)
+  const router = makeRouter(expressRouter)
 
   const initRoutes: t.initRoutes = ({ routes, model }) => {
     routes.forEach(route => router(route, model[route.model]))

@@ -1,5 +1,4 @@
 import { makeServerDeps } from './deps'
-import { LoggerMock } from '.'
 
 test('app', () => {
   const deps = makeServerDeps({
@@ -11,7 +10,6 @@ test('app', () => {
       },
       prefix: 'PRE_',
     },
-    logger: new LoggerMock(),
   })
   return deps.drivers.init().then((data: any) =>
     data.close().then(() => {
@@ -55,7 +53,6 @@ test('Module handles request successfully', () => {
       },
       prefix: 'PRE_',
     },
-    logger: new LoggerMock(),
   })
   makeModule({ deps })
   return deps.drivers.init().then((data: any) =>

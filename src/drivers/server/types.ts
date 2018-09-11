@@ -1,5 +1,4 @@
 import * as cT from '../../config/types'
-import * as lT from '../logger/types'
 
 export interface IRoute {
   url: string
@@ -18,4 +17,4 @@ export interface IServer {
   serverListen: any
 }
 
-export type makeServer = (config: cT.IConfig, logger: lT.ILogger) => IServer
+export type makeServer = (config: cT.IConfig) => IServer
