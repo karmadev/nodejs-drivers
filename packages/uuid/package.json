@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@types/uuid": "^3.4.3",
+    "uuid": "^3.3.2"
+  }
+}
