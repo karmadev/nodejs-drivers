@@ -36,12 +36,15 @@ export const makeConfig: t.makeConfig = args => {
 
   const definedEnvVars: { [s: string]: string } = Object.entries(
     envVars
-  ).reduce((acc, [key, val]) => {
-    if (typeof val !== 'undefined') {
-      acc[key] = val
-    }
-    return acc
-  }, {})
+  ).reduce(
+    (acc, [key, val]) => {
+      if (typeof val !== 'undefined') {
+        acc[key] = val
+      }
+      return acc
+    },
+    {} as t.IConfig
+  )
 
   return Object.entries(definedEnvVars)
     .filter(makeFilterToPrefixed(prefix))

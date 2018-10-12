@@ -16,9 +16,7 @@
     "clean": "lerna run clean",
     "lint": "lerna run lint",
     "build": "lerna run build",
-    "test": "lerna run test",
-    "check-packages": "yarn clean && yarn build && yarn test && yarn lint",
-    "publish-packages": "./scripts/publish"
+    "test": "lerna run test"
   },
   "lint-staged": {
     "*.{ts,tsx}": [
