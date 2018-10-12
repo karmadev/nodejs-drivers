@@ -1,5 +1,14 @@
 {
+  "name": "drivers-config",
+  "version": "10.0.0",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "test": "jest"
+  },
+  "devDependencies": {
+    "@types/jest": "^23.3.5",
+    "jest": "^23.6.0",
+    "ts-jest": "^23.10.4",
+    "typescript": "^3.1.3"
   }
 }
