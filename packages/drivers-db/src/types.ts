@@ -1,4 +1,4 @@
-import * as cT from '../../config/types'
+import { IConfig } from '@karmalicious/drivers-config'
 
 export type close = () => void
 
@@ -12,4 +12,4 @@ export interface IDb {
   driver: driver
 }
 
-export type makeDb = (c: cT.IConfig) => IDb
+export type makeDb = (c: IConfig) => IDb

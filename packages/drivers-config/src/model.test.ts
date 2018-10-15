@@ -1,4 +1,4 @@
-import { makeConfig } from './index'
+import { makeConfig } from './model'
 
 test('makeConfig', () => {
   const envVars = {

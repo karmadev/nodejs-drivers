@@ -1,4 +1,3 @@
-import * as fs from 'fs'
 import * as S from 'sequelize'
 import * as t from './types'
 const Sequelize = S as any
@@ -42,10 +41,10 @@ export const makeDb: t.makeDb = config => {
   ): Promise<any> =>
     sequelize
       .query(sqlString, opts)
-      .catch(err => {
+      .catch((err: any) => {
         throw err
       })
-      .then(sqlData => sqlData)
+      .then((sqlData: any) => sqlData)
 
   const db: t.IDb = {
     close: () => {

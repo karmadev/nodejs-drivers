@@ -1,6 +1,8 @@
 {
   "packages": [
-    "packages/drivers-config"
+    "packages/drivers-config",
+    "packages/drivers-db",
+    "packages/drivers-pub-sub"
   ],
   "version": "10.0.0"
 }
