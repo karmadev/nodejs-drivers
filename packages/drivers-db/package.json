@@ -1,5 +1,5 @@
 {
-  "name": "@karmalicious/drviers-db",
+  "name": "@karmalicious/drivers-db",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {

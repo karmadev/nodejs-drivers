@@ -2,7 +2,9 @@
   "packages": [
     "packages/drivers-config",
     "packages/drivers-db",
-    "packages/drivers-pub-sub"
+    "packages/drivers-pub-sub",
+    "packages/drivers-http-request",
+    "packages/drivers-http-server"
   ],
   "version": "10.0.0"
 }
