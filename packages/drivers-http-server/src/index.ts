@@ -1,7 +1,6 @@
 import * as bodyParser from 'body-parser'
 import * as express from 'express'
 import { IRoute, MakeServer, InitRoutes, IServer } from './types'
-import { IConfig } from '@karmalicious/drivers-config'
 
 const makeRouter = (expressRouter: express.Router) => (
   route: IRoute,
@@ -74,9 +73,9 @@ const makeClose = (expressClose: any, port: string | number) => () =>
     })
   })
 
-export const makeServer: MakeServer = (config: IConfig) => {
-  const { SERVER_PORT: serverPort } = config
-
+export const makeServer: MakeServer = (config: {
+  SERVER_PORT: string | number
+}) => {
   const expressServer = express()
   const expressUse = expressServer.use.bind(expressServer)
   const expressRouter = express.Router()
@@ -94,7 +93,7 @@ export const makeServer: MakeServer = (config: IConfig) => {
   const server: IServer = {
     router,
     initRoutes,
-    serverListen: makeListen(listenExpress, serverPort),
+    serverListen: makeListen(listenExpress, config.SERVER_PORT),
   }
 
   return server

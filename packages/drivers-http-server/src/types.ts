@@ -1,5 +1,3 @@
-import { IConfig } from '@karmalicious/drivers-config'
-
 export interface IRoute {
   url: string
   contentType: string
@@ -17,4 +15,4 @@ export interface IServer {
   serverListen: any
 }
 
-export type MakeServer = (config: IConfig) => IServer
+export type MakeServer = (config: { SERVER_PORT: string | number }) => IServer
