@@ -20,5 +20,8 @@
     "@google-cloud/pubsub": "^0.20.1",
     "rxjs": "^6.2.2"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "gitHead": "b56301be32b3bd1355ab57299c0c7a69aa283dda"
 }
