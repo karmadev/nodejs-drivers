@@ -1,15 +1,12 @@
-import { makeConfig } from './model'
+import { Config } from './model'
 
-test('makeConfig', () => {
+test('Config', () => {
   const envVars = {
     OTHER_KEY: 'should not be accessible',
     PRE_KEY: 'test',
   }
 
-  const config = makeConfig({
-    envVars,
-    prefix: 'PRE_',
-  })
+  const config = Config('PRE_', envVars)
 
   expect(config).toEqual({ KEY: 'test' })
 })

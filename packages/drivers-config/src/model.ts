@@ -1,37 +1,39 @@
-// ### prefix
-// All environment variables except NODE_ENV should be prefixed by some unique string.
-// This allows us to filter out not needed environment variables from the config object.
-// Example prefix: "KSALO_" or "MYAPP_".
+const makeFilterToPrefixed = (prefix: string) => ([key, _]: [
+  string,
+  any
+]): boolean => key.startsWith(prefix)
 
-// ### removeToken
-// Will remove key/val pairs where the val === removeToken (usually `'__NONE__'`).
-// This is to be explicit about what values we don't want to use in our code instead of using empty strings,
-// which might actually be a value we want to use, and not remove.
+function reduceToConfigObject(
+  accumulator: { [key: string]: string },
+  [key, val]: [string, string]
+): { [key: string]: string } {
+  return {
+    ...accumulator,
+    [key]: val,
+  }
+}
 
-// ## Returns
-// A config object with all the keys starting with the `prefix`, excluding the ones with a `removeToken`.
+const mapToNoPrefix = (prefix: string) => ([key, val]: [string, string]): [
+  string,
+  string
+] => [key.split(prefix)[1], val]
 
-import * as t from './types'
-
-const makeFilterToPrefixed: t.IMakeFilterToPrefixed = prefix => ([key, _]) =>
-  key.startsWith(prefix)
-
-const reduceToConfigObject: t.IReduceToConfigObject = (
-  accumulator,
-  [key, val]
-) => ({
-  ...accumulator,
-  [key]: val,
-})
-
-const mapToNoPrefix: t.IMapToNoPrefix = prefix => ([key, val]) => [
-  key.split(prefix)[1],
-  val,
-]
-
-export const makeConfig: t.IMakeConfig = args => {
-  const { envVars, prefix } = args
-
+/**
+ *
+ * @param prefix All environment variables except NODE_ENV should be prefixed by some unique string.
+ * This allows us to filter out not needed environment variables from the config object.
+ * Example prefix: "KSALO_" or "MYAPP_".
+ * @param envVars The environment variables, normally process.env unless running tests.
+ * @returns An object with all the keys that had the `prefix` and aren't undefined. All keys have the prefix stripped.
+ */
+export function Config(
+  prefix: string,
+  envVars: {
+    [s: string]: string | undefined
+  }
+): {
+  [s: string]: string
+} {
   const definedEnvVars: { [s: string]: string } = Object.entries(
     envVars
   ).reduce(
@@ -41,7 +43,9 @@ export const makeConfig: t.IMakeConfig = args => {
       }
       return acc
     },
-    {} as t.IConfig
+    {} as {
+      [s: string]: string
+    }
   )
 
   return Object.entries(definedEnvVars)
