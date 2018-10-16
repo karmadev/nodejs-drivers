@@ -1,6 +1,7 @@
 {
   "name": "@karmalicious/drivers-db",
   "license": "MIT",
+  "private": false,
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {

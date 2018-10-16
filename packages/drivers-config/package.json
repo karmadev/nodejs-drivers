@@ -1,5 +1,6 @@
 {
   "name": "@karmalicious/drivers-config",
+  "private": false,
   "license": "MIT",
   "version": "11.1.0",
   "main": "lib/index.js",

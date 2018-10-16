@@ -1,6 +1,7 @@
 {
   "name": "@karmalicious/drivers-pub-sub",
   "license": "MIT",
+  "private": false,
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "version": "11.1.0",
