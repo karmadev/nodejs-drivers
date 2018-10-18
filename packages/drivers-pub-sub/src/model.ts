@@ -1,35 +1,25 @@
 import * as GcpPubSub from '@google-cloud/pubsub'
 import { Subject, Observable } from 'rxjs'
-import {
-  IPubSub,
-  IPubSubSubscriptionMessage,
-  IGcpPubSub,
-  IGcpPubSubSubscription,
-} from './types'
+import { take, filter } from 'rxjs/operators'
+import { IPubSubSubscriptionMessage, IPubSub, IRpcMessage } from './types'
+import * as Gcp from './gcp-types'
 
 export class PubSub implements IPubSub {
   private projectId: string
-  private gcpPubSub: IGcpPubSub
+  private gcpPubSub: Gcp.IPubSub
 
-  constructor(projectId: string, mockedGcpPubSub?: IGcpPubSub) {
-    if (!projectId) {
+  constructor(projectId: string) {
+    if (projectId === '') {
       throw new Error('Missing argument projectId in PubSub constructor.')
     }
 
     this.projectId = projectId
-
-    if (mockedGcpPubSub) {
-      this.gcpPubSub = mockedGcpPubSub
-    } else {
-      this.gcpPubSub = new GcpPubSub({
-        projectId: this.projectId,
-      })
-    }
+    this.gcpPubSub = new GcpPubSub({ projectId })
   }
 
   public createTopic(name: string): Promise<any> {
     return this.gcpPubSub.getTopics().then((results: any[]) => {
-      const topics = results[0]
+      const [topics] = results
       const found = topics.find(
         topic => topic.name === `projects/${this.projectId}/topics/${name}`
       )
@@ -45,39 +35,66 @@ export class PubSub implements IPubSub {
     topicName: string,
     message: T
   ): Promise<any> {
-    const dataBuffer = Buffer.from(JSON.stringify(message))
+    const dataBuffer = Buffer.from(JSON.stringify(message), 'utf-8')
     return this.gcpPubSub
       .topic(topicName)
       .publisher()
       .publish(dataBuffer)
   }
 
-  public createSubscription<T>(
+  public subscribe(
     topicName: string,
     subscriptionName: string
-  ): Observable<IPubSubSubscriptionMessage<T>> {
-    const subject = new Subject<IPubSubSubscriptionMessage<T>>()
-    this.gcpPubSub
-      .topic(topicName)
-      .createSubscription(subscriptionName)
+  ): Observable<IPubSubSubscriptionMessage> {
+    const subject = new Subject<IPubSubSubscriptionMessage>()
+    this.createSubscription(topicName, subscriptionName)
       .then((results: any[]) => results[0])
       .then(subscription => {
         subscription.on('message', (gcpMessage: any) => {
-          const message: IPubSubSubscriptionMessage<T> = {
+          const message: IPubSubSubscriptionMessage = {
             gcpMessage,
             ack: () => gcpMessage.ack(),
+            // TODO: Add validation function injection.
+            // TODO: Return IParseError if JSON.parse fails.
             parseMessage: () => JSON.parse(gcpMessage.data.toString()),
           }
-          subject.next(message)
+          return subject.next(message)
         })
         subscription.on('error', (e: any) => {
-          subject.error(e)
+          return subject.error(e)
         })
       })
     return subject.asObservable()
   }
 
+  public createSubscription(
+    topicName: string,
+    subscriptionName: string
+  ): Promise<any> {
+    return this.gcpPubSub
+      .topic(topicName)
+      .subscription(subscriptionName)
+      .get({ autoCreate: true })
+  }
+
   public getSubscriptions(): Promise<any[]> {
     return this.gcpPubSub.getSubscriptions().then(results => results[0])
+  }
+
+  public request(topicName: string, message: IRpcMessage): Promise<any> {
+    const { replyTo } = message.meta
+    return this.createSubscription(topicName, replyTo)
+      .then(_ => this.publishMessage(topicName, message))
+      .then(_ =>
+        this.subscribe(topicName, replyTo)
+          .pipe(
+            filter(
+              (response: any) =>
+                response.meta.correlationId === message.meta.correlationId
+            ),
+            take(1)
+          )
+          .toPromise()
+      )
   }
 }

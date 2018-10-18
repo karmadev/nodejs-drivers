@@ -1,26 +1,6 @@
 import { Observable } from 'rxjs'
 
-export interface IGcpPubSubPublisher {
-  publish(dataBuffer: Buffer): Promise<any>
-}
-
-export interface IGcpPubSubTopic {
-  publisher(): IGcpPubSubPublisher
-  createSubscription(subscriptionName): Promise<any>
-}
-
-export interface IGcpPubSub {
-  topic(topicName: string): IGcpPubSubTopic
-  getTopics(): Promise<any>
-  createTopic(topicName: string): Promise<any>
-  getSubscriptions(): Promise<any[][]>
-}
-
-export interface IGcpPubSubSubscription {
-  on(eventName: 'message' | 'error', callback: (data: any) => void): void
-}
-
-export interface IPubSubSubscriptionMessage<T> {
+export interface IPubSubSubscriptionMessage {
   /** GCP's own data structure for the subscription message.  */
   gcpMessage: any
   /** Acknowledge that you have processed the message so PubSub doesn't try to send it again.
@@ -28,7 +8,14 @@ export interface IPubSubSubscriptionMessage<T> {
    */
   ack(): void
   /** Tries to parse the message data as JSON and return it as type T.  */
-  parseMessage(): T
+  parseMessage(): any
+}
+
+export interface IRpcMessage {
+  meta: {
+    correlationId: string
+    replyTo: string
+  }
 }
 
 export interface IPubSub {
@@ -37,9 +24,16 @@ export interface IPubSub {
   /** Publishes a message of type T to the named topic. Returns the internal GCP response type. */
   publishMessage<T extends {}>(topicName: string, message: T): Promise<any>
   /** Creates a subscription if one with the given names doesn't already exist. Returns an rxjs Observable stream for consuming the incoming messages. */
-  createSubscription<T>(
+  subscribe(
     topicName: string,
     subscriptionName: string
-  ): Observable<IPubSubSubscriptionMessage<T>>
+  ): Observable<IPubSubSubscriptionMessage>
+  createSubscription(
+    topicName: string,
+    subscriptionName: string,
+    options: object
+  ): Promise<any>
   getSubscriptions(): Promise<any[]>
+  /** Issue an RPC (request/response) message. */
+  request(topicName: string, message: IRpcMessage): Promise<any>
 }
