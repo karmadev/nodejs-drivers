@@ -1,6 +1,7 @@
 import { Observable } from 'rxjs'
+import * as Gcp from './gcp-types'
 
-export interface IPubSubSubscriptionMessage {
+export interface ISubscriptionMessage {
   /** GCP's own data structure for the subscription message.  */
   gcpMessage: any
   /** Acknowledge that you have processed the message so PubSub doesn't try to send it again.
@@ -20,20 +21,24 @@ export interface IRpcMessage {
 
 export interface IPubSub {
   /** Creates a topic if one with the given name doesn't exist. Returns the internal GCP Topic data structure for the given name. */
-  createTopic(name: string): Promise<any>
-  /** Publishes a message of type T to the named topic. Returns the internal GCP response type. */
-  publishMessage<T extends {}>(topicName: string, message: T): Promise<any>
-  /** Creates a subscription if one with the given names doesn't already exist. Returns an rxjs Observable stream for consuming the incoming messages. */
+  createTopic(name: string): Promise<Gcp.ITopic>
+  /** Publishes a message to the named topic. Returns the internal GCP message ID. */
+  publish(topicName: string, message: any): Promise<string>
+  /** Creates a subscription if one with the given names doesn't already exist. It then returns an rxjs Observable stream for consuming the incoming messages. */
   subscribe(
     topicName: string,
     subscriptionName: string
-  ): Observable<IPubSubSubscriptionMessage>
+  ): Observable<ISubscriptionMessage>
+  // Creates a subscription if one with the given names doesn't already exist. Returns the Gcp Subscription object.
   createSubscription(
     topicName: string,
     subscriptionName: string,
     options: object
-  ): Promise<any>
-  getSubscriptions(): Promise<any[]>
+  ): Promise<Gcp.ISubscription>
+  getSubscriptions(): Promise<Gcp.ISubscription[]>
   /** Issue an RPC (request/response) message. */
-  request(topicName: string, message: IRpcMessage): Promise<any>
+  request(
+    topicName: string,
+    message: IRpcMessage
+  ): Promise<ISubscriptionMessage>
 }

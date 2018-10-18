@@ -6,6 +6,7 @@ export type ICreateTopicResponse = [ITopic, IApiResponse]
 export type IGetSubscriptionResponse = [ISubscription, IApiResponse]
 export type IGetSubscriptionsResponse = [ISubscription[], IApiResponse]
 export type IGetTopicsResponse = [ITopic[], IApiResponse]
+export type IPublisherPublishResponse = [string]
 
 export interface ISubscription {
   get(gaxOpts: { autoCreate: boolean }): Promise<IGetSubscriptionResponse>
@@ -13,7 +14,7 @@ export interface ISubscription {
 }
 
 export interface IPublisher {
-  publish(dataBuffer: Buffer): Promise<any>
+  publish(dataBuffer: Buffer): Promise<IPublisherPublishResponse>
 }
 
 export interface ITopic {

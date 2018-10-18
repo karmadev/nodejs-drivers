@@ -1,7 +1,7 @@
 import * as GcpPubSub from '@google-cloud/pubsub'
 import { Subject, Observable } from 'rxjs'
-import { take, filter } from 'rxjs/operators'
-import { IPubSubSubscriptionMessage, IPubSub, IRpcMessage } from './types'
+import { map, take, filter } from 'rxjs/operators'
+import { ISubscriptionMessage, IPubSub, IRpcMessage } from './types'
 import * as Gcp from './gcp-types'
 
 export class PubSub implements IPubSub {
@@ -17,25 +17,20 @@ export class PubSub implements IPubSub {
     this.gcpPubSub = new GcpPubSub({ projectId })
   }
 
-  public createTopic(name: string): Promise<any> {
-    return this.gcpPubSub.getTopics().then((results: any[]) => {
-      const [topics] = results
-      const found = topics.find(
-        topic => topic.name === `projects/${this.projectId}/topics/${name}`
-      )
+  public async createTopic(name: string): Promise<Gcp.ITopic> {
+    const [topics] = await this.gcpPubSub.getTopics()
+    const found = topics.find(
+      topic => topic.name === `projects/${this.projectId}/topics/${name}`
+    )
+    if (found) {
       return found
-        ? found
-        : this.gcpPubSub
-            .createTopic(name)
-            .then(createResults => createResults[0])
-    })
+    }
+    const [result] = await this.gcpPubSub.createTopic(name)
+    return result
   }
 
-  public publishMessage<T extends {}>(
-    topicName: string,
-    message: T
-  ): Promise<any> {
-    const dataBuffer = Buffer.from(JSON.stringify(message), 'utf-8')
+  public publish(topicName: string, message: any): Promise<any> {
+    const dataBuffer = Buffer.from(JSON.stringify(message), 'utf8')
     return this.gcpPubSub
       .topic(topicName)
       .publisher()
@@ -45,56 +40,59 @@ export class PubSub implements IPubSub {
   public subscribe(
     topicName: string,
     subscriptionName: string
-  ): Observable<IPubSubSubscriptionMessage> {
-    const subject = new Subject<IPubSubSubscriptionMessage>()
-    this.createSubscription(topicName, subscriptionName)
-      .then((results: any[]) => results[0])
-      .then(subscription => {
-        subscription.on('message', (gcpMessage: any) => {
-          const message: IPubSubSubscriptionMessage = {
-            gcpMessage,
-            ack: () => gcpMessage.ack(),
-            // TODO: Add validation function injection.
-            // TODO: Return IParseError if JSON.parse fails.
-            parseMessage: () => JSON.parse(gcpMessage.data.toString()),
-          }
-          return subject.next(message)
-        })
-        subscription.on('error', (e: any) => {
-          return subject.error(e)
-        })
+  ): Observable<ISubscriptionMessage> {
+    const subject = new Subject<ISubscriptionMessage>()
+    this.createSubscription(topicName, subscriptionName).then(subscription => {
+      subscription.on('message', (gcpMessage: any) => {
+        const message: ISubscriptionMessage = {
+          gcpMessage,
+          ack: () => gcpMessage.ack(),
+          // TODO: Add validation function injection.
+          // TODO: Return IParseError if JSON.parse fails.
+          parseMessage: () => JSON.parse(gcpMessage.data.toString()),
+        }
+        return subject.next(message)
       })
+      subscription.on('error', (e: any) => {
+        return subject.error(e)
+      })
+    })
     return subject.asObservable()
   }
 
-  public createSubscription(
+  public async createSubscription(
     topicName: string,
     subscriptionName: string
-  ): Promise<any> {
-    return this.gcpPubSub
+  ): Promise<Gcp.ISubscription> {
+    const [result] = await this.gcpPubSub
       .topic(topicName)
       .subscription(subscriptionName)
       .get({ autoCreate: true })
+    return result
   }
 
-  public getSubscriptions(): Promise<any[]> {
-    return this.gcpPubSub.getSubscriptions().then(results => results[0])
+  public async getSubscriptions(): Promise<Gcp.ISubscription[]> {
+    const [result] = await this.gcpPubSub.getSubscriptions()
+    return result
   }
 
-  public request(topicName: string, message: IRpcMessage): Promise<any> {
+  public async request(
+    requestTopicName: string,
+    message: IRpcMessage
+  ): Promise<ISubscriptionMessage> {
     const { replyTo } = message.meta
-    return this.createSubscription(topicName, replyTo)
-      .then(_ => this.publishMessage(topicName, message))
-      .then(_ =>
-        this.subscribe(topicName, replyTo)
-          .pipe(
-            filter(
-              (response: any) =>
-                response.meta.correlationId === message.meta.correlationId
-            ),
-            take(1)
-          )
-          .toPromise()
+    await this.createTopic(replyTo)
+    await this.createSubscription(replyTo, replyTo)
+    await this.publish(requestTopicName, message)
+    return this.subscribe(replyTo, replyTo)
+      .pipe(
+        filter(
+          response =>
+            response.parseMessage().meta.correlationId ===
+            message.meta.correlationId
+        ),
+        take(1)
       )
+      .toPromise()
   }
 }
