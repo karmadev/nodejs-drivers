@@ -1,16 +1,22 @@
-const makeFilterToPrefixed = (prefix: string) => ([key, _]: [
-  string,
-  any
-]): boolean => key.startsWith(prefix)
+const filterPrefixed = (prefix: string) => ([key, _]: [string, any]): boolean =>
+  key.startsWith(prefix)
 
 function reduceToConfigObject(
   accumulator: { [key: string]: string },
   [key, val]: [string, string]
 ): { [key: string]: string } {
-  return {
-    ...accumulator,
-    [key]: val,
+  accumulator[key] = val
+  return accumulator
+}
+
+const reduceToExternals = (definedEnvVars: { [s: string]: string }) => (
+  acc: { [s: string]: string },
+  externalKey: string
+) => {
+  if (definedEnvVars[externalKey]) {
+    acc[externalKey] = definedEnvVars[externalKey]
   }
+  return acc
 }
 
 const mapToNoPrefix = (prefix: string) => ([key, val]: [string, string]): [
@@ -30,7 +36,8 @@ export function Config(
   prefix: string,
   envVars: {
     [s: string]: string | undefined
-  }
+  },
+  externalKeys: string[]
 ): {
   [s: string]: string
 } {
@@ -48,8 +55,10 @@ export function Config(
     }
   )
 
+  const externals = externalKeys.reduce(reduceToExternals(definedEnvVars), {})
+
   return Object.entries(definedEnvVars)
-    .filter(makeFilterToPrefixed(prefix))
+    .filter(filterPrefixed(prefix))
     .map(mapToNoPrefix(prefix))
-    .reduce(reduceToConfigObject, {})
+    .reduce(reduceToConfigObject, externals)
 }
