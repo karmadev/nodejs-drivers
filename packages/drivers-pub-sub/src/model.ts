@@ -1,6 +1,6 @@
 import * as GcpPubSub from '@google-cloud/pubsub'
 import { Subject, Observable } from 'rxjs'
-import { map, take, filter, tap } from 'rxjs/operators'
+import { map, take, filter, tap, share } from 'rxjs/operators'
 import {
   ISubscriptionMessage,
   IPubSub,
@@ -69,8 +69,7 @@ export class PubSub implements IPubSub {
         `Expected the cache to contain a subscription for topicName <${topicName}> and replyTo <${replyTo}>. Please call createSubscription before making a request.`
       )
     }
-    await this.publish(topicName, reqMessage)
-    return this.replyTos[replyTo][replyTo]
+    const result = this.replyTos[replyTo][replyTo]
       .pipe(
         filter(
           (resMessage: IRpcMessage) =>
@@ -79,6 +78,8 @@ export class PubSub implements IPubSub {
         take(1)
       )
       .toPromise()
+    await this.publish(topicName, reqMessage)
+    return result
   }
 
   public getSubscription(
@@ -142,14 +143,16 @@ export class PubSub implements IPubSub {
       }
       messageStream.next(message)
     })
+
     gcpSubscription.on('error', (e: any) => {
-      return messageStream.error(e)
+      messageStream.error(e)
     })
 
     if (replyTo) {
       cache[topicName][subscriptionName] = messageStream.pipe(
         tap(subMsg => subMsg.ack()),
-        map(subMsg => subMsg.parseMessage())
+        map(subMsg => subMsg.parseMessage()),
+        share()
       )
     } else {
       cache[topicName][subscriptionName] = messageStream.asObservable()
