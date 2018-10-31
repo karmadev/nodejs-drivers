@@ -39,9 +39,10 @@ export class PubSub implements IPubSub {
     )
     if (found) {
       this.topics[topicName] = found
+    } else {
+      const [result] = await this.gcpPubSub.createTopic(topicName)
+      this.topics[topicName] = result
     }
-    const [result] = await this.gcpPubSub.createTopic(topicName)
-    this.topics[topicName] = result
   }
 
   public async publish(topicName: string, message: any): Promise<void> {
