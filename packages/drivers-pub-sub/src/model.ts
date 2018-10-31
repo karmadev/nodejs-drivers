@@ -67,7 +67,7 @@ export class PubSub implements IPubSub {
     }
     if (!this.replyTos[replyTo] || !this.replyTos[replyTo][replyTo]) {
       throw new Error(
-        `Expected the cache to contain a subscription for topicName <${topicName}> and replyTo <${replyTo}>. Please call createSubscription before making a request.`
+        `Expected the cache to contain a subscription for topicName <${replyTo}> and replyTo <${replyTo}>. Please call createSubscription before making a request.`
       )
     }
     const result = this.replyTos[replyTo][replyTo]
