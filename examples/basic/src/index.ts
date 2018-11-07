@@ -4,7 +4,7 @@ import * as dotenv from 'dotenv'
 
 dotenv.config()
 
-const config = Config('BASIC_', process.env)
+const config = Config('BASIC_', process.env, ['EXTERNAL_LIB_KEY'])
 const deps = {
   config,
 }

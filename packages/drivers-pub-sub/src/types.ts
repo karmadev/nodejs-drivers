@@ -19,26 +19,32 @@ export interface IRpcMessage {
   }
 }
 
+export interface IRequestState {
+  [replyTo: string]: {
+    [correlationId: string]: Observable<any>
+  }
+}
+
 export interface IPubSub {
-  /** Creates a topic if one with the given name doesn't exist. Returns the internal GCP Topic data structure for the given name. */
-  createTopic(name: string): Promise<Gcp.ITopic>
-  /** Publishes a message to the named topic. Returns the internal GCP message ID. */
-  publish(topicName: string, message: any): Promise<string>
-  /** Creates a subscription if one with the given names doesn't already exist. It then returns an rxjs Observable stream for consuming the incoming messages. */
-  subscribe(
+  /** Creates a topic if one with the given name doesn't exist. The topic is then added to the runtime state and used by methods like publish and request. */
+  createTopic(name: string): Promise<void>
+
+  /** Creates a GCP subscription if one with the given names doesn't already exist. The subscription is then added to the runtime state and used by methods like subscribe. */
+  createSubscription(topicName: string, subscriptionName: string): Promise<void>
+
+  /** Creates a GCP subscription if one with the given names doesn't already exist. The replyTo subscription is then added to the runtime state and used by methods like request. */
+  createReplyToSubscription(replyToName: string): Promise<void>
+
+  /** Publishes a message to the named topic. */
+  publish(topicName: string, message: any): Promise<void>
+
+  getSubscription(
     topicName: string,
     subscriptionName: string
   ): Observable<ISubscriptionMessage>
-  // Creates a subscription if one with the given names doesn't already exist. Returns the Gcp Subscription object.
-  createSubscription(
-    topicName: string,
-    subscriptionName: string,
-    options: object
-  ): Promise<Gcp.ISubscription>
-  getSubscriptions(): Promise<Gcp.ISubscription[]>
   /** Issue an RPC (request/response) message. */
-  request(
-    topicName: string,
-    message: IRpcMessage
-  ): Promise<ISubscriptionMessage>
+  request(topicName: string, message: IRpcMessage): Promise<any>
+
+  /** Closes all connections */
+  close(): Promise<void>
 }

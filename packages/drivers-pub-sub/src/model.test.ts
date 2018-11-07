@@ -29,8 +29,8 @@ afterEach(() => {
 test('createTopic', async () => {
   const pubSub = new PubSub(pubSubProjectId)
   const response = await pubSub.createTopic('topic-name')
-  const result = response.name
-  expect(result).toEqual(`projects/${pubSubProjectId}/topics/topic-name`)
+  await pubSub.close()
+  expect(response).toEqual(undefined)
 })
 
 test('publishMessage', async () => {
@@ -41,31 +41,53 @@ test('publishMessage', async () => {
     testKey: 'test value',
   })
   const result = await pubSub
-    .subscribe('topic-name', 'subscription-name')
+    .getSubscription('topic-name', 'subscription-name')
     .pipe(
       take(1),
       map(psMsg => psMsg.parseMessage())
     )
     .toPromise()
+  await pubSub.close()
   expect(result).toEqual({ testKey: 'test value' })
 })
 
 test('createSubscription', async () => {
   const pubSub = new PubSub(pubSubProjectId)
-  const response = await pubSub.createTopic('topic-name')
+  await pubSub.createTopic('topic-name')
   const result = await pubSub.createSubscription(
     'topic-name',
     'subscription-name'
   )
-  expect(typeof result.on).toEqual('function')
+  await pubSub.close()
+  expect(result).toEqual(undefined)
 })
 
-test('getSubscriptions', async () => {
+test('createReplyToSubscription', async () => {
+  const pubSub = new PubSub(pubSubProjectId)
+  await pubSub.createTopic('reply-to-name')
+  const result = await pubSub.createReplyToSubscription('reply-to-name')
+  await pubSub.close()
+  expect(result).toEqual(undefined)
+})
+
+test('getSubscription', async () => {
   const pubSub = new PubSub(pubSubProjectId)
   const response = await pubSub.createTopic('topic-name')
   await pubSub.createSubscription('topic-name', 'subscription-name')
-  const result = await pubSub.getSubscriptions()
-  expect(result.length).toEqual(1)
+  const subscription = await pubSub.getSubscription(
+    'topic-name',
+    'subscription-name'
+  )
+  const resultPromise = subscription
+    .pipe(
+      take(1),
+      map(subscriptionMessage => subscriptionMessage.parseMessage())
+    )
+    .toPromise()
+  pubSub.publish('topic-name', { key: 'value' })
+  const result = await resultPromise
+  await pubSub.close()
+  expect(result).toEqual({ key: 'value' })
 })
 
 test('request', async () => {
@@ -75,7 +97,7 @@ test('request', async () => {
   await pubSub.createTopic(requestName)
   await pubSub.createSubscription(requestName, requestName)
   pubSub
-    .subscribe(requestName, requestName)
+    .getSubscription(requestName, requestName)
     .pipe(take(1))
     .toPromise()
     .then(async subMsg => {
@@ -89,6 +111,8 @@ test('request', async () => {
       subMsg.ack()
     })
 
+  await pubSub.createTopic(replyTo)
+  await pubSub.createReplyToSubscription(replyTo)
   const message: IRpcMessage = {
     meta: {
       correlationId: '11111111-1111-1111-1111-111111111111',
@@ -96,8 +120,8 @@ test('request', async () => {
     },
   }
   const result = await pubSub.request(requestName, message)
-  result.ack()
-  expect(result.parseMessage()).toEqual({
+  await pubSub.close()
+  expect(result).toEqual({
     meta: {
       correlationId: '11111111-1111-1111-1111-111111111111',
     },

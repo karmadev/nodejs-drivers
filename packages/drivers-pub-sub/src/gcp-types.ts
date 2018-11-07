@@ -11,6 +11,7 @@ export type IPublisherPublishResponse = [string]
 export interface ISubscription {
   get(gaxOpts: { autoCreate: boolean }): Promise<IGetSubscriptionResponse>
   on(eventName: 'message' | 'error', callback: (data: any) => void): void
+  close(): Promise<void>
 }
 
 export interface IPublisher {
