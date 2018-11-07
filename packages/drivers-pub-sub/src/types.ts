@@ -44,4 +44,7 @@ export interface IPubSub {
   ): Observable<ISubscriptionMessage>
   /** Issue an RPC (request/response) message. */
   request(topicName: string, message: IRpcMessage): Promise<any>
+
+  /** Closes all connections */
+  close(): Promise<void>
 }

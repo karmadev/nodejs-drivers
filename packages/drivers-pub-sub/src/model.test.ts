@@ -29,6 +29,7 @@ afterEach(() => {
 test('createTopic', async () => {
   const pubSub = new PubSub(pubSubProjectId)
   const response = await pubSub.createTopic('topic-name')
+  await pubSub.close()
   expect(response).toEqual(undefined)
 })
 
@@ -46,6 +47,7 @@ test('publishMessage', async () => {
       map(psMsg => psMsg.parseMessage())
     )
     .toPromise()
+  await pubSub.close()
   expect(result).toEqual({ testKey: 'test value' })
 })
 
@@ -56,6 +58,7 @@ test('createSubscription', async () => {
     'topic-name',
     'subscription-name'
   )
+  await pubSub.close()
   expect(result).toEqual(undefined)
 })
 
@@ -63,6 +66,7 @@ test('createReplyToSubscription', async () => {
   const pubSub = new PubSub(pubSubProjectId)
   await pubSub.createTopic('reply-to-name')
   const result = await pubSub.createReplyToSubscription('reply-to-name')
+  await pubSub.close()
   expect(result).toEqual(undefined)
 })
 
@@ -82,6 +86,7 @@ test('getSubscription', async () => {
     .toPromise()
   pubSub.publish('topic-name', { key: 'value' })
   const result = await resultPromise
+  await pubSub.close()
   expect(result).toEqual({ key: 'value' })
 })
 
@@ -115,6 +120,7 @@ test('request', async () => {
     },
   }
   const result = await pubSub.request(requestName, message)
+  await pubSub.close()
   expect(result).toEqual({
     meta: {
       correlationId: '11111111-1111-1111-1111-111111111111',
