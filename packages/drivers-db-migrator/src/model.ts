@@ -1,11 +1,11 @@
 import * as Knex from 'knex'
-import { Subject } from 'rxjs'
-import { IDbMigrator, IDbMigratorConfig, IContext } from './types'
+import { Subject, Observable } from 'rxjs'
+import { IDbMigrator, IDbMigratorConfig, IContext, ILogMessage } from './types'
 
 export class DbMigrator implements IDbMigrator {
   private knex: Knex
   private config: IDbMigratorConfig
-  private infoLogStream: Subject<any>
+  private infoLogStream: Subject<ILogMessage>
 
   constructor(config: IDbMigratorConfig) {
     this.config = config
@@ -79,8 +79,18 @@ export class DbMigrator implements IDbMigrator {
     )
   }
 
-  public close(): Promise<void> {
-    return Promise.resolve(this.knex.destroy())
+  public close(context: IContext): Promise<void> {
+    return Promise.resolve(this.knex.destroy()).then(() => {
+      this.infoLogStream.next({
+        level: 'info',
+        cid: context.cid,
+        message: 'Closed DB connection for db-migrator.',
+      })
+    })
+  }
+
+  public getLogStream(): Observable<ILogMessage> {
+    return this.infoLogStream.asObservable()
   }
 }
 

@@ -1,8 +1,9 @@
 // NOTE: To run these tests, you need to have the migrations built to the dist folder if using typescript.
 
-import { DbMigrator } from '.'
+import { DbMigrator } from './model'
 import * as dotenv from 'dotenv'
 import * as path from 'path'
+import { take } from 'rxjs/operators'
 
 function setup() {
   dotenv.config({ path: path.resolve(__dirname, '../.env.test') })
@@ -40,7 +41,7 @@ test('undoMigrationLock', async () => {
   const { context, dbMigrator } = setup()
   await dbMigrator.migrate(context)
   const result = await dbMigrator.undoMigrationLock(context)
-  dbMigrator.close()
+  dbMigrator.close(context)
   await expect(result).toEqual(undefined)
 })
 
@@ -49,7 +50,7 @@ test('rollback', async () => {
   const { context, dbMigrator } = setup()
   await dbMigrator.migrate(context)
   const result = await dbMigrator.rollback(context)
-  dbMigrator.close()
+  dbMigrator.close(context)
   await expect(result).toEqual('none')
 })
 
@@ -57,7 +58,7 @@ test('migrate', async () => {
   expect.assertions(1)
   const { context, dbMigrator } = setup()
   const result = await dbMigrator.migrate(context)
-  dbMigrator.close()
+  dbMigrator.close(context)
   await expect(result).toEqual('1542356708711')
 })
 
@@ -67,6 +68,23 @@ test('unseed', async () => {
 
   await dbMigrator.migrate(context)
   const result = await dbMigrator.unseed(context, 'test')
-  dbMigrator.close()
+  dbMigrator.close(context)
   expect(result).toEqual(undefined)
+})
+
+test('getLogStream', async () => {
+  expect.assertions(1)
+  const { context, dbMigrator } = setup()
+
+  const result = dbMigrator
+    .getLogStream()
+    .pipe(take(1))
+    .toPromise()
+  await dbMigrator.migrate(context)
+  dbMigrator.close(context)
+  expect(await result).toEqual({
+    cid: '11111111-1111-1111-1111-111111111111',
+    level: 'info',
+    message: 'Migrated to latest version <1542356708711>.',
+  })
 })

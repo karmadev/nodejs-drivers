@@ -1,3 +1,5 @@
+import { Observable } from 'rxjs'
+
 export interface IDbMigratorConfig {
   host: string
   user: string
@@ -15,6 +17,12 @@ export interface IContext {
   cid: string
 }
 
+export interface ILogMessage {
+  level: 'info'
+  message: string
+  cid: string
+}
+
 export interface IDbMigrator {
   /** Rollback to previous migration and log the version. */
   rollback(context: IContext): Promise<string>
@@ -24,6 +32,8 @@ export interface IDbMigrator {
   unseed(context: IContext, tableName: string): Promise<void>
   /** Will unlock the migrations lock. This is needed if the service crashes before unlocking it after a migration. */
   undoMigrationLock(context: IContext): Promise<void>
-  /** Close the connection */
-  close(): Promise<void>
+  /** Close the connection. */
+  close(context: IContext): Promise<void>
+  /** Get the log messages as an Observable stream. */
+  getLogStream(): Observable<ILogMessage>
 }
