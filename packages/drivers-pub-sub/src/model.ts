@@ -1,4 +1,4 @@
-import * as GcpPubSub from '@google-cloud/pubsub'
+import { PubSub as GcpPubSub } from '@google-cloud/pubsub'
 import { Subject, Observable } from 'rxjs'
 import { map, take, filter, tap, share } from 'rxjs/operators'
 import { ISubscriptionMessage, IPubSub, IRpcMessage } from './types'
@@ -117,7 +117,9 @@ export class PubSub implements IPubSub {
   }
 
   private setInitialState() {
-    this.gcpPubSub = new GcpPubSub({ projectId: this.projectId })
+    this.gcpPubSub = (new GcpPubSub({
+      projectId: this.projectId,
+    }) as unknown) as Gcp.IPubSub
     this.topics = {}
     this.subscriptionStreams = {}
     this.replyToStreams = {}

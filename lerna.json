@@ -1,9 +1,0 @@
-Don't use lerna to do anything in this project! I'm deprecating it.
-
-{
-  "packages": [
-    "examples/*",
-    "packages/*"
-  ],
-  "version": "independent"
-}
