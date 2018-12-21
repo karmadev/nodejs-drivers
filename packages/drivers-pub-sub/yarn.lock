@@ -34,10 +34,10 @@
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/@google-cloud/promisify/-/promisify-0.3.1.tgz#f641e6d944a8e0a05ee0cb1091dfa60089becdba"
 
-"@google-cloud/pubsub@^0.21.1":
-  version "0.21.1"
-  resolved "https://registry.yarnpkg.com/@google-cloud/pubsub/-/pubsub-0.21.1.tgz#5b0466e82095849911f9251971ef27167046737d"
-  integrity sha512-vIRM1bePRzjtl9O94uHNIB3AL8kVOJm2zzgh2mCwzb7enhlCN+ygYMCbRuTyq+SZWr3o3T1VPtCSs7bYQHzmFw==
+"@google-cloud/pubsub@^0.22.2":
+  version "0.22.2"
+  resolved "https://registry.yarnpkg.com/@google-cloud/pubsub/-/pubsub-0.22.2.tgz#4cc0a1752337970a800717a8adb89961aa744444"
+  integrity sha512-I9DQk6cknbZUr7b76BtOtYV4KfvLhx6Q6p1431TAnC6efo8TNqrRN1rbYfPkPhZmEe7QfQXfdfC5AbmZlQ63Cw==
   dependencies:
     "@google-cloud/paginator" "^0.1.0"
     "@google-cloud/projectify" "^0.3.0"
@@ -117,9 +117,10 @@
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@protobufjs/utf8/-/utf8-1.1.0.tgz#a777360b5b39a1a2e5106f8e858f2fd2d060c570"
 
-"@types/jest@^23.3.9":
-  version "23.3.9"
-  resolved "https://registry.yarnpkg.com/@types/jest/-/jest-23.3.9.tgz#c16b55186ee73ae65e001fbee69d392c51337ad1"
+"@types/jest@^23.3.10":
+  version "23.3.10"
+  resolved "https://registry.yarnpkg.com/@types/jest/-/jest-23.3.10.tgz#4897974cc317bf99d4fe6af1efa15957fa9c94de"
+  integrity sha512-DC8xTuW/6TYgvEg3HEXS7cu9OijFqprVDXXiOcdOKZCU/5PJNLZU37VVvmZHdtMiGOa8wAA/We+JzbdxFzQTRQ==
 
 "@types/lodash@^4.14.104":
   version "4.14.117"
@@ -133,10 +134,10 @@
   version "10.11.7"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-10.11.7.tgz#0e75ca9357d646ca754016ca1d68a127ad7e7300"
 
-"@types/node@^10.12.9":
-  version "10.12.9"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-10.12.9.tgz#a07bfa74331471e1dc22a47eb72026843f7b95c8"
-  integrity sha512-eajkMXG812/w3w4a1OcBlaTwsFPO5F7fJ/amy+tieQxEMWBlbV1JGSjkFM+zkHNf81Cad+dfIRA+IBkvmvdAeA==
+"@types/node@^10.12.18":
+  version "10.12.18"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-10.12.18.tgz#1d3ca764718915584fcd9f6344621b7672665c67"
+  integrity sha512-fh+pAqt4xRzPfqA6eh3Z2y6fyZavRIumvjhaCL753+TVkGKGhpPeyrJG2JftD0T9q4GF00KjefsQ+PQNDdWQaQ==
 
 "@types/node@^9.4.6":
   version "9.6.35"
@@ -1300,10 +1301,10 @@ google-proto-files@^0.18.0:
     protobufjs "^6.8.0"
     walkdir "0.0.12"
 
-google-pubsub-emulator@^2.0.4:
-  version "2.0.4"
-  resolved "https://registry.yarnpkg.com/google-pubsub-emulator/-/google-pubsub-emulator-2.0.4.tgz#90b295c75ee3dc5ebdbad4652082ef2bb33954d5"
-  integrity sha512-tN6SOSiejapt2xVJ29/kUxjONeL2HU52NWM3eh6mcP7AH9oUv22z1Dl5sNQTHgLzO7lqNiotWUXq3S8HPwQTIg==
+google-pubsub-emulator@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/google-pubsub-emulator/-/google-pubsub-emulator-3.0.0.tgz#9385f09b4befa0b87f6aec4c07574cfc98022365"
+  integrity sha512-+lpWwp5FHlS3fGkFdNsBOy6Gu/UxaQnhH7zYv8d5V/HLtu0VGRSevp8tknvUnFnhx2t1ADvj/VHykeDfRpzK0g==
   dependencies:
     fs-extra "^7.0.0"
     get-port "^4.0.0"
@@ -2714,7 +2715,7 @@ path-key@^2.0.0:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/path-key/-/path-key-2.0.1.tgz#411cadb574c5a140d3a4b1910d40d80cc9f40b40"
 
-path-parse@^1.0.5:
+path-parse@^1.0.5, path-parse@^1.0.6:
   version "1.0.6"
   resolved "https://registry.yarnpkg.com/path-parse/-/path-parse-1.0.6.tgz#d62dbb5679405d72c4737ec58600e9ddcf06d24c"
 
@@ -2997,6 +2998,13 @@ resolve-url@^0.2.1:
 resolve@1.1.7:
   version "1.1.7"
   resolved "https://registry.yarnpkg.com/resolve/-/resolve-1.1.7.tgz#203114d82ad2c5ed9e8e0411b3932875e889e97b"
+
+resolve@1.x:
+  version "1.9.0"
+  resolved "https://registry.yarnpkg.com/resolve/-/resolve-1.9.0.tgz#a14c6fdfa8f92a7df1d996cb7105fa744658ea06"
+  integrity sha512-TZNye00tI67lwYvzxCxHGjwTNlUV70io54/Ed4j6PscB8xVfuBJpRenI/o6dVk0cY0PYTY27AgCoGGxRnYuItQ==
+  dependencies:
+    path-parse "^1.0.6"
 
 ret@~0.1.10:
   version "0.1.15"
@@ -3426,9 +3434,10 @@ trim-right@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/trim-right/-/trim-right-1.0.1.tgz#cb2e1203067e0c8de1f614094b9fe45704ea6003"
 
-ts-jest@^23.10.4:
-  version "23.10.4"
-  resolved "https://registry.yarnpkg.com/ts-jest/-/ts-jest-23.10.4.tgz#a7a953f55c9165bcaa90ff91014a178e87fe0df8"
+ts-jest@^23.10.5:
+  version "23.10.5"
+  resolved "https://registry.yarnpkg.com/ts-jest/-/ts-jest-23.10.5.tgz#cdb550df4466a30489bf70ba867615799f388dd5"
+  integrity sha512-MRCs9qnGoyKgFc8adDEntAOP64fWK1vZKnOYU1o2HxaqjdJvGqmkLCPCnVq1/If4zkUmEjKPnCiUisTrlX2p2A==
   dependencies:
     bs-logger "0.x"
     buffer-from "1.x"
@@ -3436,6 +3445,7 @@ ts-jest@^23.10.4:
     json5 "2.x"
     make-error "1.x"
     mkdirp "0.x"
+    resolve "1.x"
     semver "^5.5"
     yargs-parser "10.x"
 
@@ -3459,9 +3469,10 @@ type-check@~0.3.2:
   dependencies:
     prelude-ls "~1.1.2"
 
-typescript@^3.1.6:
-  version "3.1.6"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.1.6.tgz#b6543a83cfc8c2befb3f4c8fba6896f5b0c9be68"
+typescript@^3.2.2:
+  version "3.2.2"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.2.2.tgz#fe8101c46aa123f8353523ebdcf5730c2ae493e5"
+  integrity sha512-VCj5UiSyHBjwfYacmDuc/NOk4QQixbE+Wn7MFJuS0nRuPQbof132Pw4u53dm264O8LPc2MVsc7RJNml5szurkg==
 
 uglify-js@^3.1.4:
   version "3.4.9"
