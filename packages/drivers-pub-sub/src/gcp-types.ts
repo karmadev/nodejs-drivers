@@ -14,16 +14,12 @@ export interface ISubscription {
   close(): Promise<void>
 }
 
-export interface IPublisher {
-  publish(dataBuffer: Buffer): Promise<IPublisherPublishResponse>
-}
-
 export interface ITopic {
   name: string
   delete(): Promise<IDeleteTopicResponse>
   exists(): Promise<ITopicExistsResponse>
-  publisher(): IPublisher
   subscription(subscriptionName): ISubscription
+  publishJSON(message: any): Promise<string>
 }
 
 export interface IPubSub {

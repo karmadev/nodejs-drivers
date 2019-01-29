@@ -8,22 +8,20 @@
   "scripts": {
     "build": "tsc",
     "test": "PUBSUB_PROJECT_ID=my-project-id jest",
-    "prepare": "npm run build"
+    "prepare": "npm run build",
+    "release": "standard-version"
   },
   "devDependencies": {
-    "@types/jest": "^23.3.10",
+    "@types/jest": "^23.3.13",
     "@types/node": "^10.12.18",
     "google-pubsub-emulator": "^3.0.0",
-    "jest": "^23.6.0",
+    "jest": "^24.0.0",
     "ts-jest": "^23.10.5",
     "typescript": "^3.2.2"
   },
   "dependencies": {
-    "@google-cloud/pubsub": "^0.22.2",
-    "rxjs": "^6.2.2"
-  },
-  "publishConfig": {
-    "access": "public"
-  },
-  "gitHead": "b56301be32b3bd1355ab57299c0c7a69aa283dda"
+    "@google-cloud/pubsub": "0.23.0",
+    "rxjs": "^6.2.2",
+    "standard-version": "^4.4.0"
+  }
 }
