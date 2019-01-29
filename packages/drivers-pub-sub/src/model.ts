@@ -44,8 +44,7 @@ export class PubSub implements IPubSub {
         `Expected topicName <${topicName}> to be in the cache, but did not find it. Please call createTopic before publishing.`
       )
     }
-    const dataBuffer = Buffer.from(JSON.stringify(message), 'utf8')
-    await this.topics[topicName].publisher().publish(dataBuffer)
+     await this.topics[topicName].publishJSON(message)
   }
 
   public async request(
@@ -119,7 +118,7 @@ export class PubSub implements IPubSub {
   private setInitialState() {
     this.gcpPubSub = (new GcpPubSub({
       projectId: this.projectId,
-    }) as unknown) as Gcp.IPubSub
+    })) as Gcp.IPubSub
     this.topics = {}
     this.subscriptionStreams = {}
     this.replyToStreams = {}
