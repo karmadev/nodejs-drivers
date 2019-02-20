@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [13.7.0](https://github.com/karmadev/nodejs-drivers/compare/v1.1.0...v13.7.0) (2019-02-20)
+
+
+### Features
+
+* update to latest gcp pub-sub version. ([8f6b8a6](https://github.com/karmadev/nodejs-drivers/commit/8f6b8a6))
+
+
+
 <a name="13.6.0"></a>
 # [13.6.0](https://github.com/karmadev/nodejs-drivers/compare/v13.5.0...v13.6.0) (2019-01-29)
 

@@ -4,7 +4,7 @@
   "private": false,
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
-  "version": "13.6.0",
+  "version": "13.7.0",
   "scripts": {
     "build": "tsc",
     "test": "PUBSUB_PROJECT_ID=my-project-id jest",
@@ -12,16 +12,16 @@
     "release": "standard-version"
   },
   "devDependencies": {
-    "@types/jest": "^23.3.13",
-    "@types/node": "^10.12.18",
+    "@types/jest": "^24.0.6",
+    "@types/node": "^11.9.4",
     "google-pubsub-emulator": "^3.0.0",
-    "jest": "^24.0.0",
-    "ts-jest": "^23.10.5",
-    "typescript": "^3.2.2"
+    "jest": "^24.1.0",
+    "standard-version": "^5.0.0",
+    "ts-jest": "^24.0.0",
+    "typescript": "^3.3.3"
   },
   "dependencies": {
-    "@google-cloud/pubsub": "0.23.0",
-    "rxjs": "^6.2.2",
-    "standard-version": "^4.4.0"
+    "@google-cloud/pubsub": "0.24.1",
+    "rxjs": "^6.4.0"
   }
 }
